@@ -8,7 +8,9 @@
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include <stdlib.h>
-#include <time.h>
+#include <stdint.h>
+#include "pico/time.h"
+
 
 const int BTN_PIN_R = 10;
 const int BTN_PIN_G = 11;
@@ -45,7 +47,7 @@ void btn_callback(uint gpio, uint32_t events){
   }
 }
 
-void butao (int btn, int led, int bzz, int freq) {
+void pisca (int led, int bzz, int freq) {
     for (int x=0; x<200; x++){
         gpio_put(led, 1);
         gpio_put(bzz, 1);
@@ -54,6 +56,11 @@ void butao (int btn, int led, int bzz, int freq) {
         sleep_us(freq); 
     }
     gpio_put(led, 0);
+}
+
+uint32_t obter_tempo() {
+    uint32_t tempo_us = time_us_32();
+    return tempo_us;
 }
 
 int main() {
@@ -97,29 +104,93 @@ int main() {
 
     // codigo
 
-    int sequencia_genius[4];
-    int sequencia_jogada[4];
+    bool genius = true;
 
-    srand(time(NULL));
+    int sequencia_genius[10] = {0};
+    int sequencia_jogada[10] = {0}; // inicializa todos os elementos da lista como 0;
+    int index = 0;
+    int n =  1;
+    const int red = 0;
+    const int green = 1;
+    const int blue = 2;
+    const int yellow = 3;
 
-    for (int i = 0; i < 4; i++) {
-        sequencia_genius[i] = rand() % 4; // Gera um número aleatório de 0 a NUM_BOTOES-1
-    }
+    while (1) {
 
-    while (true) {
+        while (genius) {
+
+            srandom((unsigned int) obter_tempo());
+
+            for (int i = 0; i < n; i++) {
+                sequencia_genius[i] = random() % 4;
+            }
+
+            for (int i=0; i < n; i++){
+                if (sequencia_genius[i] == red){
+                    pisca(LED_PIN_R, BZZ_PIN, 440);
+                    sleep_ms(100);
+                }
+                else if (sequencia_genius[i] == green){
+                    pisca(LED_PIN_G, BZZ_PIN, 660);
+                    sleep_ms(100);
+                }
+                else if (sequencia_genius[i] == blue){
+                    pisca(LED_PIN_B, BZZ_PIN, 880);
+                    sleep_ms(100);
+                }
+                else if (sequencia_genius[i] == yellow){
+                    pisca(LED_PIN_Y, BZZ_PIN, 1220);
+                    sleep_ms(100);
+                }
+            }
+
+            genius = false;
+        }
+
+ 
 
         if (FLAG_BTN_R){
-            butao(FLAG_BTN_R, LED_PIN_R, BZZ_PIN, 440);
-
+            pisca(LED_PIN_R, BZZ_PIN, 440);
+            sequencia_jogada[index] = red;
+            index++;
         }FLAG_BTN_R = 0;
         if (FLAG_BTN_G){
-            butao(FLAG_BTN_G, LED_PIN_G, BZZ_PIN, 660);
+            pisca(LED_PIN_G, BZZ_PIN, 660);
+            sequencia_jogada[index] = green;
+            index++;
         }FLAG_BTN_G = 0;
         if (FLAG_BTN_B){
-            butao(FLAG_BTN_B, LED_PIN_B, BZZ_PIN, 880);
+            pisca(LED_PIN_B, BZZ_PIN, 880);
+            sequencia_jogada[index] = blue;
+            index++;
         }FLAG_BTN_B = 0;
         if (FLAG_BTN_Y){
-            butao(FLAG_BTN_Y, LED_PIN_Y, BZZ_PIN, 1220);
+            pisca(LED_PIN_Y, BZZ_PIN, 1220);
+            sequencia_jogada[index] = yellow;
+            index++;
         }FLAG_BTN_Y = 0;
+
+        if (index >= n){
+            for (int i=0; i < n; i++){
+                if (sequencia_genius[i] != sequencia_jogada[i]){
+
+                    printf("ANIMAAAAAAALLLLL");
+                    return 0;
+                
+                } else { 
+                    printf("voce acertou... \n");
+                    index = 0;
+                    genius = true;
+                }
+            }
+            n+=1;
+        }
+
+        if (n == 10) {
+            printf("voce ganhou");
+            return 1;
+        }
+
+        
     }
 }
