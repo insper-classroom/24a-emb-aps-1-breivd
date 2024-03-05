@@ -19,6 +19,8 @@
     "cmake.buildBeforeRun": true,
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "files.associations": {
-        "timer.h": "c"
+        "timer.h": "c",
+        "stdint.h": "c",
+        "time.h": "c"
     }
 }

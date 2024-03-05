@@ -59,7 +59,7 @@ void pisca (int led, int bzz, int freq) {
 }
 
 uint32_t obter_tempo() {
-    uint32_t tempo_us = time_us_32();
+    uint32_t tempo_us = to_us_since_boot(get_absolute_time());
     return tempo_us;
 }
 
@@ -102,12 +102,31 @@ int main() {
     gpio_set_irq_enabled_with_callback(BTN_PIN_B, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
     gpio_set_irq_enabled_with_callback(BTN_PIN_Y, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
 
+    //musiquinha inicial
+
+    for (int x=0; x<2000; x++){
+        gpio_put(LED_PIN_B, 1);
+        gpio_put(LED_PIN_R, 1);
+        gpio_put(LED_PIN_Y, 1);
+        gpio_put(LED_PIN_G, 1);
+        gpio_put(BZZ_PIN, 1);
+        sleep_us(400);
+        gpio_put(BZZ_PIN, 0);
+        sleep_us(400); 
+    }
+    gpio_put(LED_PIN_B, 0);
+    gpio_put(LED_PIN_G, 0);
+    gpio_put(LED_PIN_Y, 0);
+    gpio_put(LED_PIN_R, 0);
+    
+
+
     // codigo
 
     bool genius = true;
 
-    int sequencia_genius[10] = {0};
-    int sequencia_jogada[10] = {0}; // inicializa todos os elementos da lista como 0;
+    int sequencia_genius[100] = {0};
+    int sequencia_jogada[100] = {0}; // inicializa todos os elementos da lista como 0;
     int index = 0;
     int n =  1;
     const int red = 0;
@@ -175,6 +194,16 @@ int main() {
                 if (sequencia_genius[i] != sequencia_jogada[i]){
 
                     printf("ANIMAAAAAAALLLLL");
+                    for (int x=0; x<2000; x++){
+                        gpio_put(LED_PIN_B, 1);
+                        gpio_put(LED_PIN_R, 1);
+                        gpio_put(LED_PIN_Y, 1);
+                        gpio_put(LED_PIN_G, 1);
+                        gpio_put(BZZ_PIN, 1);
+                        sleep_us(400);
+                        gpio_put(BZZ_PIN, 0);
+                        sleep_us(400); 
+                    }
                     return 0;
                 
                 } else { 
@@ -187,6 +216,7 @@ int main() {
         }
 
         if (n == 10) {
+            
             printf("voce ganhou");
             return 1;
         }
