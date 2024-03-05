@@ -128,11 +128,12 @@ int main() {
     int sequencia_genius[100] = {0};
     int sequencia_jogada[100] = {0}; // inicializa todos os elementos da lista como 0;
     int index = 0;
-    int n =  1;
+    int n = 1;
     const int red = 0;
     const int green = 1;
     const int blue = 2;
     const int yellow = 3;
+    int i = 0;
 
     while (1) {
 
@@ -140,30 +141,34 @@ int main() {
 
             srandom((unsigned int) obter_tempo());
 
-            for (int i = 0; i < n; i++) {
-                sequencia_genius[i] = random() % 4;
-            }
+            sequencia_genius[i] = random() % 4;
+            
 
             for (int i=0; i < n; i++){
+                if (n==1){
+                    sleep_ms(500);
+                }
                 if (sequencia_genius[i] == red){
                     pisca(LED_PIN_R, BZZ_PIN, 440);
-                    sleep_ms(100);
+                    sleep_ms(500);
                 }
                 else if (sequencia_genius[i] == green){
                     pisca(LED_PIN_G, BZZ_PIN, 660);
-                    sleep_ms(100);
+                    sleep_ms(500);
                 }
                 else if (sequencia_genius[i] == blue){
                     pisca(LED_PIN_B, BZZ_PIN, 880);
-                    sleep_ms(100);
+                    sleep_ms(500);
                 }
                 else if (sequencia_genius[i] == yellow){
                     pisca(LED_PIN_Y, BZZ_PIN, 1220);
-                    sleep_ms(100);
+                    sleep_ms(500);
                 }
             }
 
             genius = false;
+
+            i++;
         }
 
  
@@ -193,17 +198,21 @@ int main() {
             for (int i=0; i < n; i++){
                 if (sequencia_genius[i] != sequencia_jogada[i]){
 
-                    printf("ANIMAAAAAAALLLLL");
+                    printf("oce errou.");
                     for (int x=0; x<2000; x++){
                         gpio_put(LED_PIN_B, 1);
                         gpio_put(LED_PIN_R, 1);
                         gpio_put(LED_PIN_Y, 1);
                         gpio_put(LED_PIN_G, 1);
                         gpio_put(BZZ_PIN, 1);
-                        sleep_us(400);
+                        sleep_us(800);
                         gpio_put(BZZ_PIN, 0);
-                        sleep_us(400); 
+                        sleep_us(800); 
                     }
+                    gpio_put(LED_PIN_B, 0);
+                    gpio_put(LED_PIN_R, 0);
+                    gpio_put(LED_PIN_Y, 0);
+                    gpio_put(LED_PIN_G, 0);
                     return 0;
                 
                 } else { 
