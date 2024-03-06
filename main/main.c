@@ -180,20 +180,78 @@ int main() {
 
             sequencia_genius[i] = random() % 4;
             
-
-            for (int i=0; i < n; i++){
-                sleep_ms(500);
-                if (sequencia_genius[i] == red){
-                    pisca(LED_PIN_R, BZZ_PIN, 440);
+            if(n<=5){
+                for (int i=0; i < n; i++){
+                    sleep_ms(500);
+                    if (sequencia_genius[i] == red){
+                        pisca(LED_PIN_R, BZZ_PIN, 440);
+                    }
+                    else if (sequencia_genius[i] == green){
+                        pisca(LED_PIN_G, BZZ_PIN, 660);
+                    }
+                    else if (sequencia_genius[i] == blue){
+                        pisca(LED_PIN_B, BZZ_PIN, 880);
+                    }
+                    else if (sequencia_genius[i] == yellow){
+                        pisca(LED_PIN_Y, BZZ_PIN, 1220);
+                    }
                 }
-                else if (sequencia_genius[i] == green){
-                    pisca(LED_PIN_G, BZZ_PIN, 660);
-                }
-                else if (sequencia_genius[i] == blue){
-                    pisca(LED_PIN_B, BZZ_PIN, 880);
-                }
-                else if (sequencia_genius[i] == yellow){
-                    pisca(LED_PIN_Y, BZZ_PIN, 1220);
+            }else{
+                for (int i=1; i < n; i++){
+                    sleep_ms(500);
+                    if (sequencia_genius[i] == red){
+                        pisca(LED_PIN_R, BZZ_PIN, 440);
+                        if (sequencia_genius[i-1] == blue){
+                            pisca(LED_PIN_B, BZZ_PIN, 440);
+                        }
+                        
+                        if (sequencia_genius[i-1] == yellow){
+                            pisca(LED_PIN_Y, BZZ_PIN, 440);
+                        }
+                        if (sequencia_genius[i-1] == green){
+                            pisca(LED_PIN_G, BZZ_PIN, 440);
+                        }
+                        
+                    }
+                    else if (sequencia_genius[i] == green){
+                        pisca(LED_PIN_G, BZZ_PIN, 660);
+                        if (sequencia_genius[i-1] == blue){
+                            pisca(LED_PIN_B, BZZ_PIN, 440);
+                        }
+                        
+                        if (sequencia_genius[i-1] == yellow){
+                            pisca(LED_PIN_Y, BZZ_PIN, 440);
+                        }
+                        if (sequencia_genius[i-1] == red){
+                            pisca(LED_PIN_R, BZZ_PIN, 440);
+                        }
+                    }
+                    else if (sequencia_genius[i] == blue){
+                        pisca(LED_PIN_B, BZZ_PIN, 880);
+                        if (sequencia_genius[i-1] == red){
+                            pisca(LED_PIN_R, BZZ_PIN, 440);
+                        }
+                        
+                        if (sequencia_genius[i-1] == yellow){
+                            pisca(LED_PIN_Y, BZZ_PIN, 440);
+                        }
+                        if (sequencia_genius[i-1] == green){
+                            pisca(LED_PIN_G, BZZ_PIN, 440);
+                        }
+                    }
+                    else if (sequencia_genius[i] == yellow){
+                        pisca(LED_PIN_Y, BZZ_PIN, 1220);
+                        if (sequencia_genius[i-1] == blue){
+                            pisca(LED_PIN_B, BZZ_PIN, 440);
+                        }
+                        
+                        if (sequencia_genius[i-1] == red){
+                            pisca(LED_PIN_R, BZZ_PIN, 440);
+                        }
+                        if (sequencia_genius[i-1] == green){
+                            pisca(LED_PIN_G, BZZ_PIN, 440);
+                        }
+                    }
                 }
             }
 
@@ -260,7 +318,7 @@ int main() {
                     genius = true;
                 }
             }
-             
+            
             n+=1;
             
 
