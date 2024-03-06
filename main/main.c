@@ -19,10 +19,10 @@ const int BTN_PIN_Y = 13;
 
 const int BZZ_PIN = 14;
 
-const int LED_PIN_R = 21;
-const int LED_PIN_G = 20;
-const int LED_PIN_B = 19;
-const int LED_PIN_Y = 18;
+const int LED_PIN_R = 18;
+const int LED_PIN_G = 19;
+const int LED_PIN_B = 20;
+const int LED_PIN_Y = 21;
 
 
 volatile int FLAG_BTN_R = 0;
@@ -65,6 +65,7 @@ uint32_t obter_tempo() {
 
 int main() {
     stdio_init_all();
+    flash_init();
 
     gpio_init(LED_PIN_R);
     gpio_set_dir(LED_PIN_R, GPIO_OUT);
@@ -119,6 +120,24 @@ int main() {
     gpio_put(LED_PIN_Y, 0);
     gpio_put(LED_PIN_R, 0);
     
+    uint32_t flash_address = 0x10000;
+
+    // Data to write to flash memory
+    uint32_t data_to_write = 0xABCD1234;
+
+    // Write data to flash memory
+    printf("Writing data to flash memory...\n");
+    flash_range_program(flash_address, &data_to_write, sizeof(data_to_write));
+
+    // Read data from flash memory
+    uint32_t read_data;
+    flash_range_read(flash_address, &read_data, sizeof(read_data));
+
+    // Print read data
+    printf("Data read from flash memory: 0x%X\n", read_data);
+
+    
+
 
 
     // codigo
@@ -145,24 +164,18 @@ int main() {
             
 
             for (int i=0; i < n; i++){
-                if (n==1){
-                    sleep_ms(500);
-                }
+                sleep_ms(500);
                 if (sequencia_genius[i] == red){
                     pisca(LED_PIN_R, BZZ_PIN, 440);
-                    sleep_ms(500);
                 }
                 else if (sequencia_genius[i] == green){
                     pisca(LED_PIN_G, BZZ_PIN, 660);
-                    sleep_ms(500);
                 }
                 else if (sequencia_genius[i] == blue){
                     pisca(LED_PIN_B, BZZ_PIN, 880);
-                    sleep_ms(500);
                 }
                 else if (sequencia_genius[i] == yellow){
                     pisca(LED_PIN_Y, BZZ_PIN, 1220);
-                    sleep_ms(500);
                 }
             }
 
@@ -205,9 +218,9 @@ int main() {
                         gpio_put(LED_PIN_Y, 1);
                         gpio_put(LED_PIN_G, 1);
                         gpio_put(BZZ_PIN, 1);
-                        sleep_us(800);
+                        sleep_us(1200);
                         gpio_put(BZZ_PIN, 0);
-                        sleep_us(800); 
+                        sleep_us(1200); 
                     }
                     gpio_put(LED_PIN_B, 0);
                     gpio_put(LED_PIN_R, 0);
