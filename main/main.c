@@ -5,12 +5,19 @@
  */
 
 #include <stdio.h>
+#include "string.h"
 #include "pico/stdlib.h"
+#include "pico_flash.h"
+
 #include "hardware/gpio.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include "pico/time.h"
-
+#include "hardware/flash.h"
+#include "pico_flash.h"
+#include "hardware/sync.h"
+#define FLASH_TARGET_OFFSET (1792*1024) 
+const uint8_t *flash_target_contents = (const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET); 
 
 const int BTN_PIN_R = 10;
 const int BTN_PIN_G = 11;
@@ -57,6 +64,37 @@ void pisca (int led, int bzz, int freq) {
     }
     gpio_put(led, 0);
 }
+void beep(int pin, int freq, int time){
+    long delay = 1000000 / (2 * freq);
+    long cycles = (long)freq * time / 1000;
+    for (long i = 0; i < cycles; i++){
+        gpio_put(pin, 1);
+        sleep_us(delay);
+        gpio_put(pin, 0);
+        sleep_us(delay);
+    }
+}
+
+void music_start(){
+    // Intro Star Wars
+    int led_pins[] = {LED_PIN_R, LED_PIN_G, LED_PIN_B, LED_PIN_Y};
+    int led_index = 0; 
+
+    // Frequências, durações e atrasos para o tema de Star Wars
+    int freqs[] = {440, 440, 440, 349, 523, 440, 349, 523, 440, 659, 659, 659, 698, 523, 415, 349, 523, 440};
+    int times[] = {500, 500, 500, 350, 150, 500, 350, 150, 1000, 500, 500, 500, 350, 150, 500, 350, 150, 1000};
+    int delays[] = {150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150, 150};
+
+    for (int i = 0; i < sizeof(freqs)/sizeof(freqs[0]); i++) {
+        beep(BZZ_PIN, freqs[i], times[i]);
+        gpio_put(led_pins[led_index], 1);
+        sleep_ms(delays[i]);
+        gpio_put(led_pins[led_index], 0); 
+
+        led_index = (led_index + 1) % (sizeof(led_pins)/sizeof(led_pins[0]));
+    }
+    sleep_ms(1000);
+}
 
 uint32_t obter_tempo() {
     uint32_t tempo_us = to_us_since_boot(get_absolute_time());
@@ -65,7 +103,6 @@ uint32_t obter_tempo() {
 
 int main() {
     stdio_init_all();
-    flash_init();
 
     gpio_init(LED_PIN_R);
     gpio_set_dir(LED_PIN_R, GPIO_OUT);
@@ -103,38 +140,14 @@ int main() {
     gpio_set_irq_enabled_with_callback(BTN_PIN_B, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
     gpio_set_irq_enabled_with_callback(BTN_PIN_Y, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
 
-    //musiquinha inicial
+    stdio_init_all();                                                                           //++ Initialize rp2040
 
-    for (int x=0; x<2000; x++){
-        gpio_put(LED_PIN_B, 1);
-        gpio_put(LED_PIN_R, 1);
-        gpio_put(LED_PIN_Y, 1);
-        gpio_put(LED_PIN_G, 1);
-        gpio_put(BZZ_PIN, 1);
-        sleep_us(400);
-        gpio_put(BZZ_PIN, 0);
-        sleep_us(400); 
-    }
-    gpio_put(LED_PIN_B, 0);
-    gpio_put(LED_PIN_G, 0);
-    gpio_put(LED_PIN_Y, 0);
-    gpio_put(LED_PIN_R, 0);
+                                                                          //++ Wait for 15 secs
     
-    uint32_t flash_address = 0x10000;
 
-    // Data to write to flash memory
-    uint32_t data_to_write = 0xABCD1234;
-
-    // Write data to flash memory
-    printf("Writing data to flash memory...\n");
-    flash_range_program(flash_address, &data_to_write, sizeof(data_to_write));
-
-    // Read data from flash memory
-    uint32_t read_data;
-    flash_range_read(flash_address, &read_data, sizeof(read_data));
-
-    // Print read data
-    printf("Data read from flash memory: 0x%X\n", read_data);
+     
+    //musiquinha inicial
+    music_start();
 
     
 
@@ -148,16 +161,21 @@ int main() {
     int sequencia_jogada[100] = {0}; // inicializa todos os elementos da lista como 0;
     int index = 0;
     int n = 1;
+
     const int red = 0;
     const int green = 1;
     const int blue = 2;
     const int yellow = 3;
     int i = 0;
 
+    
+
+
     while (1) {
 
         while (genius) {
 
+            
             srandom((unsigned int) obter_tempo());
 
             sequencia_genius[i] = random() % 4;
@@ -207,6 +225,9 @@ int main() {
             index++;
         }FLAG_BTN_Y = 0;
 
+        
+
+        
         if (index >= n){
             for (int i=0; i < n; i++){
                 if (sequencia_genius[i] != sequencia_jogada[i]){
@@ -226,6 +247,11 @@ int main() {
                     gpio_put(LED_PIN_R, 0);
                     gpio_put(LED_PIN_Y, 0);
                     gpio_put(LED_PIN_G, 0);
+                    for (int y = 0; y<n-1;y++){
+                        pisca(LED_PIN_B, BZZ_PIN, 880);
+                        sleep_ms(500);
+                    }
+                    
                     return 0;
                 
                 } else { 
@@ -234,11 +260,14 @@ int main() {
                     genius = true;
                 }
             }
+             
             n+=1;
+            
+
+            
         }
 
         if (n == 10) {
-            
             printf("voce ganhou");
             return 1;
         }
