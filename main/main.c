@@ -109,18 +109,18 @@ int main() {
             sequencia_genius[i] = random() % 4;
             
             
-            for (i; i < n; i++){
+            for (int j = 0; j < n; j++){
                 sleep_ms(500);
-                if (sequencia_genius[i] == red){
+                if (sequencia_genius[j] == red){
                     pisca(LED_PIN_R, BZZ_PIN, 440);
                 }
-                else if (sequencia_genius[i] == green){
+                else if (sequencia_genius[j] == green){
                     pisca(LED_PIN_G, BZZ_PIN, 660);
                 }
-                else if (sequencia_genius[i] == blue){
+                else if (sequencia_genius[j] == blue){
                     pisca(LED_PIN_B, BZZ_PIN, 880);
                 }
-                else if (sequencia_genius[i] == yellow){
+                else if (sequencia_genius[j] == yellow){
                     pisca(LED_PIN_Y, BZZ_PIN, 1220);
                 }
             }
@@ -157,8 +157,8 @@ int main() {
 
         
         if (index >= n){
-            for (i; i < n; i++){
-                if (sequencia_genius[i] != sequencia_jogada[i]){
+            for (int k = 0; k < n; k++){
+                if (sequencia_genius[k] != sequencia_jogada[k]){
 
                     printf("oce errou.");
                     for (int x=0; x<2000; x++){
