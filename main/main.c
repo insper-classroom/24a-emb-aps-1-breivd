@@ -95,10 +95,9 @@ int main() {
     const int green = 1;
     const int blue = 2;
     const int yellow = 3;
-    int i = 0;
 
     
-
+    int i = 0;
 
     while (1) {
 
@@ -110,7 +109,7 @@ int main() {
             sequencia_genius[i] = random() % 4;
             
             
-            for (int i=0; i < n; i++){
+            for (i; i < n; i++){
                 sleep_ms(500);
                 if (sequencia_genius[i] == red){
                     pisca(LED_PIN_R, BZZ_PIN, 440);
