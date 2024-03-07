@@ -1,4 +1,4 @@
-add_executable(main main.c)
+add_executable(main main.c functions.c)
 
 # pull in common dependencies
 target_link_libraries(main pico_stdlib)
