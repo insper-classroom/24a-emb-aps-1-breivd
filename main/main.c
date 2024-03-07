@@ -157,7 +157,7 @@ int main() {
 
         
         if (index >= n){
-            for (int i=0; i < n; i++){
+            for (i; i < n; i++){
                 if (sequencia_genius[i] != sequencia_jogada[i]){
 
                     printf("oce errou.");
