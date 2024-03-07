@@ -7,17 +7,14 @@
 #include <stdio.h>
 #include "string.h"
 #include "pico/stdlib.h"
-#include "pico_flash.h"
 
 #include "hardware/gpio.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include "pico/time.h"
-#include "hardware/flash.h"
-#include "pico_flash.h"
+
 #include "hardware/sync.h"
-#define FLASH_TARGET_OFFSET (1792*1024) 
-const uint8_t *flash_target_contents = (const uint8_t *) (XIP_BASE + FLASH_TARGET_OFFSET); 
+
 
 const int BTN_PIN_R = 10;
 const int BTN_PIN_G = 11;
@@ -180,78 +177,20 @@ int main() {
 
             sequencia_genius[i] = random() % 4;
             
-            if(n<=5){
-                for (int i=0; i < n; i++){
-                    sleep_ms(500);
-                    if (sequencia_genius[i] == red){
-                        pisca(LED_PIN_R, BZZ_PIN, 440);
-                    }
-                    else if (sequencia_genius[i] == green){
-                        pisca(LED_PIN_G, BZZ_PIN, 660);
-                    }
-                    else if (sequencia_genius[i] == blue){
-                        pisca(LED_PIN_B, BZZ_PIN, 880);
-                    }
-                    else if (sequencia_genius[i] == yellow){
-                        pisca(LED_PIN_Y, BZZ_PIN, 1220);
-                    }
+            
+            for (int i=0; i < n; i++){
+                sleep_ms(500);
+                if (sequencia_genius[i] == red){
+                    pisca(LED_PIN_R, BZZ_PIN, 440);
                 }
-            }else{
-                for (int i=1; i < n; i++){
-                    sleep_ms(500);
-                    if (sequencia_genius[i] == red){
-                        pisca(LED_PIN_R, BZZ_PIN, 440);
-                        if (sequencia_genius[i-1] == blue){
-                            pisca(LED_PIN_B, BZZ_PIN, 440);
-                        }
-                        
-                        if (sequencia_genius[i-1] == yellow){
-                            pisca(LED_PIN_Y, BZZ_PIN, 440);
-                        }
-                        if (sequencia_genius[i-1] == green){
-                            pisca(LED_PIN_G, BZZ_PIN, 440);
-                        }
-                        
-                    }
-                    else if (sequencia_genius[i] == green){
-                        pisca(LED_PIN_G, BZZ_PIN, 660);
-                        if (sequencia_genius[i-1] == blue){
-                            pisca(LED_PIN_B, BZZ_PIN, 440);
-                        }
-                        
-                        if (sequencia_genius[i-1] == yellow){
-                            pisca(LED_PIN_Y, BZZ_PIN, 440);
-                        }
-                        if (sequencia_genius[i-1] == red){
-                            pisca(LED_PIN_R, BZZ_PIN, 440);
-                        }
-                    }
-                    else if (sequencia_genius[i] == blue){
-                        pisca(LED_PIN_B, BZZ_PIN, 880);
-                        if (sequencia_genius[i-1] == red){
-                            pisca(LED_PIN_R, BZZ_PIN, 440);
-                        }
-                        
-                        if (sequencia_genius[i-1] == yellow){
-                            pisca(LED_PIN_Y, BZZ_PIN, 440);
-                        }
-                        if (sequencia_genius[i-1] == green){
-                            pisca(LED_PIN_G, BZZ_PIN, 440);
-                        }
-                    }
-                    else if (sequencia_genius[i] == yellow){
-                        pisca(LED_PIN_Y, BZZ_PIN, 1220);
-                        if (sequencia_genius[i-1] == blue){
-                            pisca(LED_PIN_B, BZZ_PIN, 440);
-                        }
-                        
-                        if (sequencia_genius[i-1] == red){
-                            pisca(LED_PIN_R, BZZ_PIN, 440);
-                        }
-                        if (sequencia_genius[i-1] == green){
-                            pisca(LED_PIN_G, BZZ_PIN, 440);
-                        }
-                    }
+                else if (sequencia_genius[i] == green){
+                    pisca(LED_PIN_G, BZZ_PIN, 660);
+                }
+                else if (sequencia_genius[i] == blue){
+                    pisca(LED_PIN_B, BZZ_PIN, 880);
+                }
+                else if (sequencia_genius[i] == yellow){
+                    pisca(LED_PIN_Y, BZZ_PIN, 1220);
                 }
             }
 
@@ -325,7 +264,7 @@ int main() {
             
         }
 
-        if (n == 10) {
+        if (n == 100) {
             printf("voce ganhou");
             return 1;
         }
