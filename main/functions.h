@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "pico/time.h"
+#include "hardware/sync.h"
 
 
 extern const int BTN_PIN_R;

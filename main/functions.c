@@ -1,4 +1,4 @@
-#include "header.h"
+#include "functions.h"
 #include <stdlib.h>
 
 void btn_callback(uint gpio, uint32_t events){

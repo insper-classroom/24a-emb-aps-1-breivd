@@ -4,17 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#include <stdio.h>
-#include "string.h"
-#include "pico/stdlib.h"
-
-#include "hardware/gpio.h"
-#include <stdlib.h>
-#include <stdint.h>
-#include "pico/time.h"
-
-#include "hardware/sync.h"
-#include "header.h"
+#include "functions.h"
 
 
 const int BTN_PIN_R = 10;
