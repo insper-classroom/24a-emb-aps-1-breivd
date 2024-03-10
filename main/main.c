@@ -6,7 +6,6 @@
 
 #include "functions.h"
 
-
 const int BTN_PIN_R = 10;
 const int BTN_PIN_G = 11;
 const int BTN_PIN_B = 12;
@@ -19,13 +18,10 @@ const int LED_PIN_G = 19;
 const int LED_PIN_B = 20;
 const int LED_PIN_Y = 21;
 
-
 volatile int FLAG_BTN_R = 0;
 volatile int FLAG_BTN_G = 0;
 volatile int FLAG_BTN_B = 0;
 volatile int FLAG_BTN_Y = 0;
-
-
 
 int main() {
     stdio_init_all();
@@ -68,8 +64,8 @@ int main() {
 
     stdio_init_all();                                                                           //++ Initialize rp2040
 
-     
     //musiquinha inicial
+
     music_start();
 
     // codigo
@@ -86,13 +82,12 @@ int main() {
     const int blue = 2;
     const int yellow = 3;
 
-    
     int i = 0;
+   
 
     while (1) {
 
         while (genius) {
-
             
             srandom((unsigned int) obter_tempo());
 
@@ -120,8 +115,6 @@ int main() {
             i++;
         }
 
- 
-
         if (FLAG_BTN_R){
             pisca(LED_PIN_R, BZZ_PIN, 440);
             sequencia_jogada[index] = red;
@@ -143,9 +136,6 @@ int main() {
             index++;
         }FLAG_BTN_Y = 0;
 
-        
-
-        
         if (index >= n){
             for (int k = 0; k < n; k++){
                 if (sequencia_genius[k] != sequencia_jogada[k]){
@@ -181,8 +171,6 @@ int main() {
             
             n+=1;
             
-
-            
         }
 
         if (n == 100) {
@@ -190,6 +178,5 @@ int main() {
             return 1;
         }
 
-        
     }
 }
